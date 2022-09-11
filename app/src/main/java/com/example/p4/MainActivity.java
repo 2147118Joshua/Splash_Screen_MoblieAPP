@@ -1,80 +1,130 @@
 package com.example.p4;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.Layout;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
+
+import com.example.p4.Adapter.BestSellerAdapter;
+import com.example.p4.Adapter.ClothingAdapter;
+import com.example.p4.Adapter.OfferAdapter;
+import com.example.p4.Model.BestSeller;
+import com.example.p4.Model.Clothing;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    Button button;
-    private static final String TAG = "MainActivity";
+    private RecyclerView offerRecyclerView , bestSellerRecyclerView , clothingRecyclerView , bestSellerRecyclerView2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-      Toast.makeText(MainActivity.this,"i am on create",Toast.LENGTH_SHORT).show();
 
-        button = findViewById(R.id.button);
+        /// offer RecyclerView
+        offerRecyclerView = findViewById(R.id.offerRecyclerView);
+        offerRecyclerView.setHasFixedSize(true);
+        offerRecyclerView.setLayoutManager(new LinearLayoutManager(this , LinearLayoutManager.HORIZONTAL , false));
 
-        LayoutInflater inflater = getLayoutInflater();
+        List<Integer> imageList = new ArrayList<>();
 
-        View layout = inflater.inflate(R.layout.custom_toast,(ViewGroup) findViewById(R.id.toast_layout));
+        imageList.add(R.drawable.offer_shoping);
+        imageList.add(R.drawable.nikon_canon_offer);
+        imageList.add(R.drawable.tv_offer);
 
-        final Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL,0,0);
-        toast.setDuration(Toast.LENGTH_SHORT);
-        toast.setView(layout);
+        OfferAdapter offerAdapter = new OfferAdapter(imageList);
 
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toast.show();
-            }
-        });
+        offerRecyclerView.setAdapter(offerAdapter);
 
-//        protected void onStart() {
-//            Toast.makeText(this, "onStart MainActivity",
-//                    Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onStart MainActivity"); super.onStart();
-//        }
-//        protected void onResume() {
-//            Toast.makeText(this, "onResume MainActivity", Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onResume MainActivity"); super.onResume();
-//        }
-//        protected void onPause() {
-//            Toast.makeText(this, "onPause MainActivity",
-//                    Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onPause MainActivity"); super.onPause();
-//        }
-//        protected void onStop() {
-//            Toast.makeText(this, "onStop MainActivity",
-//                    Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onStop MainActivity");
-//            super.onStop();
-//        }
-//        protected void onRestart() {
-//            Toast.makeText(this, "onRestart MainActivity",
-//                    Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onRestart MainActivity"); super.onRestart();
-//        }
-//        protected void onDestroy() {
-//            Toast.makeText(this, "onDestroy MainActivity",
-//                    Toast.LENGTH_SHORT).show();
-//            Log.d(TAG, "onDestroy MainActivity"); super.onDestroy();
-//        }
+        // best RecyclerView
+
+        bestSellerRecyclerView = findViewById(R.id.bestSellerRecyclerview);
+        bestSellerRecyclerView.setHasFixedSize(true);
+        bestSellerRecyclerView.setLayoutManager(new LinearLayoutManager(this , LinearLayoutManager.HORIZONTAL , false));
+
+        List<BestSeller> bestSellerList = new ArrayList<>();
+
+        bestSellerList.add(new BestSeller(R.drawable.bags , "Up to 20% off"));
+        bestSellerList.add(new BestSeller(R.drawable.mobiles , "Up to 20% off"));
+        bestSellerList.add(new BestSeller(R.drawable.watches , "Up to 20% off"));
+
+        BestSellerAdapter bestSellerAdapter = new BestSellerAdapter(bestSellerList);
+
+        bestSellerRecyclerView.setAdapter(bestSellerAdapter);
 
 
+        // clothing RecyclerView
 
+        clothingRecyclerView = findViewById(R.id.clothingRecyclerview);
+        clothingRecyclerView.setHasFixedSize(true);
+        clothingRecyclerView.setLayoutManager(new LinearLayoutManager(this , LinearLayoutManager.HORIZONTAL , false));
 
+        List<Clothing> clothingList = new ArrayList<>();
+
+        clothingList.add(new Clothing(R.drawable.levis_clothing , "Up to 30% off"));
+        clothingList.add(new Clothing(R.drawable.women_clothing , "Up to 30% off"));
+        clothingList.add(new Clothing(R.drawable.nikeshoes , "Up to 30% off"));
+
+        ClothingAdapter clothingAdapter = new ClothingAdapter(clothingList);
+        clothingRecyclerView.setAdapter(clothingAdapter);
+
+        // best RecyclerView 2
+
+        bestSellerRecyclerView2 = findViewById(R.id.bestSeller2RecyclerView);
+        bestSellerRecyclerView2.setHasFixedSize(true);
+        bestSellerRecyclerView2.setLayoutManager(new LinearLayoutManager(this , LinearLayoutManager.HORIZONTAL , false));
+
+        bestSellerRecyclerView2.setAdapter(bestSellerAdapter);
     }
+
+    @Override
+
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.map_options,menu);
+        return  true;
+    }
+
+    @Override
+
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.all:
+
+                Toast.makeText(MainActivity.this,"Going to home page",Toast.LENGTH_SHORT).show();
+                 setprofile();
+
+
+                return true;
+
+            case R.id.apolo:
+
+                Toast.makeText(MainActivity.this,"Thankyou ",Toast.LENGTH_SHORT).show();
+                suggestion();
+
+                return true;
+
+            default:
+
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void setprofile(){
+        Intent intent = new Intent(this, setprofile.class);
+        startActivity(intent);
+    }
+
+    public void suggestion(){
+        Intent intent = new Intent(this, suggestion.class);
+        startActivity(intent);
+    }
+
 }
